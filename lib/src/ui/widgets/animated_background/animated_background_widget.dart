@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../components/components.dart'; // Для связи с ViewModel
 
-class AnimatedBackgroundWidget extends StatelessWidget {
+class AnimatedBackgroundWidget extends StatefulWidget {
   final double width;
   final double height;
 
@@ -15,13 +15,21 @@ class AnimatedBackgroundWidget extends StatelessWidget {
   });
 
   @override
+  _AnimatedBackgroundWidgetState createState() =>
+      _AnimatedBackgroundWidgetState();
+}
+
+class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
+    with SingleTickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => PointsViewModel(
-        width: width,
-        height: height,
-        numPoints: 10,
-        vsync: TickerProviderStateMixin.of(context), // Для анимации
+        width: widget.width,
+        height: widget.height,
+        numPoints: 20,
+        vsync:
+            this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
       ),
       child: Consumer<PointsViewModel>(
         builder: (context, viewModel, child) {
