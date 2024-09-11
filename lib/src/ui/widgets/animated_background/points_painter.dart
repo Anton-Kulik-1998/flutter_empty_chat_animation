@@ -28,7 +28,7 @@ class PointsPainter extends CustomPainter {
     } else {
       // Пока изображение не загружено, рисуем точки
       for (final point in points) {
-        canvas.drawCircle(point, imageSize / 2, paint);
+        canvas.drawCircle(point, 0, paint);
       }
     }
   }
