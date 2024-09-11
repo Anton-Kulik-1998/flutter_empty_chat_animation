@@ -16,7 +16,7 @@ class PointsPainter extends CustomPainter {
 
     // Draw points
     for (final point in points) {
-      canvas.drawCircle(point, 1.0, paint);
+      canvas.drawCircle(point, 50.0, paint);
     }
 
 
