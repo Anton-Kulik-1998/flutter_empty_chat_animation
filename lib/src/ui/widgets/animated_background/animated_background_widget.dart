@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/points_painter.dart';
 
 class AnimatedBackgroundWidget extends StatefulWidget {
@@ -22,10 +24,11 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
   late AnimationController _controller;
   final List<Offset> _points = [];
   final Random _random = Random();
-  final int _numPoints = 10;
+  final int _numPoints = 20;
   final double _maxSpeed = 0.5;
-  final double _maxLineDistance = 100.0;
+  final double _imageSize = 50.0; // Размер изображения
   final List<Offset> _velocities = [];
+  ui.Image? _image;
 
   @override
   void initState() {
@@ -49,18 +52,58 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
       });
 
     _controller.repeat();
+    _loadImage(); // Загружаем изображение при инициализации
+  }
+
+  // Метод для асинхронной загрузки изображения
+  Future<void> _loadImage() async {
+    final ByteData data = await rootBundle.load('assets/images/ufo.png');
+    final Uint8List bytes = Uint8List.view(data.buffer);
+    ui.decodeImageFromList(bytes, (img) {
+      setState(() {
+        _image = img;
+      });
+    });
   }
 
   void _updatePoints() {
-    for (int i = 0; i < _numPoints; i++) {
-      final newPos = _points[i] + _velocities[i];
-      if (newPos.dx < 0 || newPos.dx > widget.width) {
+    for (int i = 0; i < _points.length; i++) {
+      _points[i] = _points[i] + _velocities[i];
+
+      // Проверяем столкновение со стенками
+      if (_points[i].dx < 0 || _points[i].dx > widget.width) {
         _velocities[i] = Offset(-_velocities[i].dx, _velocities[i].dy);
       }
-      if (newPos.dy < 0 || newPos.dy > widget.height) {
+      if (_points[i].dy < 0 || _points[i].dy > widget.height) {
         _velocities[i] = Offset(_velocities[i].dx, -_velocities[i].dy);
       }
-      _points[i] = _points[i] + _velocities[i];
+
+      // Проверка на столкновение с другими изображениями
+      for (int j = 0; j < _points.length; j++) {
+        if (i != j) {
+          final distance = (_points[i] - _points[j]).distance;
+
+          // Если изображения пересекаются
+          if (distance < _imageSize) {
+            // Инвертируем скорости по обеим осям
+            final tempVelocity = _velocities[i];
+            _velocities[i] = _velocities[j];
+            _velocities[j] = tempVelocity;
+
+            // Сдвигаем изображения, чтобы они не пересекались
+            final overlap = _imageSize - distance;
+            final direction = (_points[i] - _points[j]).direction;
+            _points[i] = _points[i].translate(
+              cos(direction) * overlap / 2,
+              sin(direction) * overlap / 2,
+            );
+            _points[j] = _points[j].translate(
+              -cos(direction) * overlap / 2,
+              -sin(direction) * overlap / 2,
+            );
+          }
+        }
+      }
     }
   }
 
@@ -68,7 +111,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
     final touchPosition = details.localPosition;
     for (int i = 0; i < _points.length; i++) {
       final distance = (touchPosition - _points[i]).distance;
-      if (distance < _maxLineDistance) {
+      if (distance < _imageSize) {
         final direction = _points[i] - touchPosition;
         _velocities[i] = direction * (_maxSpeed / direction.distance);
       }
@@ -84,17 +127,19 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Получение текущей темы
     final isDarkTheme = theme.brightness == Brightness.dark;
-
-    // Выбор цвета на основе текущей темы
     final containerColor = isDarkTheme ? Colors.white : Colors.black;
 
     return GestureDetector(
-      onPanUpdate: _onPanUpdate,
+      onPanUpdate: _onPanUpdate, // Обработка нажатий
       child: CustomPaint(
         painter: PointsPainter(
-            _points, _maxLineDistance, containerColor, containerColor),
+          _points,
+          _image,
+          _imageSize,
+          containerColor.withOpacity(0.1),
+          containerColor,
+        ),
         child: Container(),
       ),
     );
