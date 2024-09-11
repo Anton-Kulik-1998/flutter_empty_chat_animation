@@ -22,7 +22,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
   late AnimationController _controller;
   final List<Offset> _points = [];
   final Random _random = Random();
-  final int _numPoints = 150;
+  final int _numPoints = 10;
   final double _maxSpeed = 0.5;
   final double _maxLineDistance = 100.0;
   final List<Offset> _velocities = [];
@@ -93,8 +93,8 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
     return GestureDetector(
       onPanUpdate: _onPanUpdate,
       child: CustomPaint(
-        painter: PointsPainter(_points, _maxLineDistance,
-            containerColor.withOpacity(0), containerColor),
+        painter: PointsPainter(
+            _points, _maxLineDistance, containerColor, containerColor),
         child: Container(),
       ),
     );
