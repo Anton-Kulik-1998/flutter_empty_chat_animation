@@ -8,9 +8,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       home: Scaffold(
         body: AnimatedBackgroundWidget(
           width: size.width,
