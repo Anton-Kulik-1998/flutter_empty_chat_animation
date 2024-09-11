@@ -19,17 +19,7 @@ class PointsPainter extends CustomPainter {
       canvas.drawCircle(point, 1.0, paint);
     }
 
-    // Draw lines between nearest points
-    for (int i = 0; i < points.length; i++) {
-      for (int j = i + 1; j < points.length; j++) {
-        final distance = (points[i] - points[j]).distance;
-        if (distance < maxDistance) {
-          paint.color =
-              lineColor.withOpacity(1.0 - (distance / maxDistance));
-          canvas.drawLine(points[i], points[j], paint);
-        }
-      }
-    }
+
   }
 
   @override
