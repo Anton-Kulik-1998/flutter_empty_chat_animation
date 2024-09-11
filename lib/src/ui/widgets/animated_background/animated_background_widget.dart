@@ -78,6 +78,21 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
         _velocities[i] = Offset(_velocities[i].dx, -_velocities[i].dy);
       }
 
+      // //Возврат точек, которые попали за поле
+      if (_points[i].dx < -5) {
+        _velocities[i] = Offset(1, _velocities[i].dy);
+      }
+      if (_points[i].dx > widget.width + 5) {
+        _velocities[i] = Offset(-1, _velocities[i].dy);
+      }
+
+      if (_points[i].dy < -5) {
+        _velocities[i] = Offset(_velocities[i].dx, 1);
+      }
+      if (_points[i].dy > widget.height + 5) {
+        _velocities[i] = Offset(_velocities[i].dx, -1);
+      }
+
       // Проверка на столкновение с другими изображениями
       for (int j = 0; j < _points.length; j++) {
         if (i != j) {
