@@ -57,44 +57,52 @@ class PointsViewModel extends ChangeNotifier {
     });
   }
 
+  void _checkingWallsCollision(int i) {
+    if (_points[i].position.dx < 0 || _points[i].position.dx > width) {
+      _points[i].velocity =
+          Offset(-_points[i].velocity.dx, _points[i].velocity.dy);
+    }
+    if (_points[i].position.dy < 0 || _points[i].position.dy > height) {
+      _points[i].velocity =
+          Offset(_points[i].velocity.dx, -_points[i].velocity.dy);
+    }
+  }
+
+  void _checkingImageCollision(int i) {
+    for (int j = 0; j < _points.length; j++) {
+      if (i != j) {
+        final distance = (_points[i].position - _points[j].position).distance;
+
+        if (distance < imageSize) {
+          final tempVelocity = _points[i].velocity;
+          _points[i].velocity = _points[j].velocity;
+          _points[j].velocity = tempVelocity;
+
+          final overlap = imageSize - distance;
+          final direction =
+              (_points[i].position - _points[j].position).direction;
+          _points[i].position += Offset(
+            cos(direction) * overlap / 2,
+            sin(direction) * overlap / 2,
+          );
+          _points[j].position += Offset(
+            -cos(direction) * overlap / 2,
+            -sin(direction) * overlap / 2,
+          );
+        }
+      }
+    }
+  }
+
   void _updatePoints() {
     for (int i = 0; i < _points.length; i++) {
       _points[i].position += _points[i].velocity;
 
       // Проверка на столкновение со стенками
-      if (_points[i].position.dx < 0 || _points[i].position.dx > width) {
-        _points[i].velocity =
-            Offset(-_points[i].velocity.dx, _points[i].velocity.dy);
-      }
-      if (_points[i].position.dy < 0 || _points[i].position.dy > height) {
-        _points[i].velocity =
-            Offset(_points[i].velocity.dx, -_points[i].velocity.dy);
-      }
+      _checkingWallsCollision(i);
 
       // Проверка на столкновение с другими изображениями
-      for (int j = 0; j < _points.length; j++) {
-        if (i != j) {
-          final distance = (_points[i].position - _points[j].position).distance;
-
-          if (distance < imageSize) {
-            final tempVelocity = _points[i].velocity;
-            _points[i].velocity = _points[j].velocity;
-            _points[j].velocity = tempVelocity;
-
-            final overlap = imageSize - distance;
-            final direction =
-                (_points[i].position - _points[j].position).direction;
-            _points[i].position += Offset(
-              cos(direction) * overlap / 2,
-              sin(direction) * overlap / 2,
-            );
-            _points[j].position += Offset(
-              -cos(direction) * overlap / 2,
-              -sin(direction) * overlap / 2,
-            );
-          }
-        }
-      }
+      _checkingImageCollision(i);
     }
     notifyListeners();
   }
