@@ -7,11 +7,13 @@ import '../components/components.dart'; // Для связи с ViewModel
 class AnimatedBackgroundWidget extends StatefulWidget {
   final double width;
   final double height;
+  final Widget? child;
 
   const AnimatedBackgroundWidget({
     super.key,
     required this.width,
     required this.height,
+    this.child,
   });
 
   @override
@@ -45,7 +47,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                 paintColor: Colors.black.withOpacity(0.1),
                 lineColor: Colors.black,
               ),
-              child: Container(),
+              child: child,
             ),
           );
         },
