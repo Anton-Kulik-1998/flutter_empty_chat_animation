@@ -57,6 +57,23 @@ class PointsViewModel extends ChangeNotifier {
     });
   }
 
+  void _returnPointToScreen(int i) {
+    // //Возврат точек, которые попали за поле
+      if (_points[i].position.dx < -5) {
+        _points[i].velocity = Offset(1, _points[i].velocity.dy);
+      }
+      if (_points[i].position.dx > width + 5) {
+        _points[i].velocity = Offset(-1, _points[i].velocity.dy);
+      }
+
+      if (_points[i].position.dy < -5) {
+        _points[i].velocity = Offset(_points[i].velocity.dx, 1);
+      }
+      if (_points[i].position.dy > height + 5) {
+        _points[i].velocity = Offset(_points[i].velocity.dx, -1);
+      }
+  }
+
   void _checkingWallsCollision(int i) {
     if (_points[i].position.dx < 0 || _points[i].position.dx > width) {
       _points[i].velocity =
@@ -100,6 +117,9 @@ class PointsViewModel extends ChangeNotifier {
 
       // Проверка на столкновение со стенками
       _checkingWallsCollision(i);
+
+      // Возврат точки обратно на видимую часть экрана, если она вылетела
+      _returnPointToScreen(i);
 
       // Проверка на столкновение с другими изображениями
       _checkingImageCollision(i);
