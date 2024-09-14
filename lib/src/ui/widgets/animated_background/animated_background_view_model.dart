@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/animated_background.dart';
 
-class PointsViewModel extends ChangeNotifier {
+class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double width;
   final double height;
   final int numPoints;
@@ -21,7 +21,7 @@ class PointsViewModel extends ChangeNotifier {
   List<PointModel> get points => _points;
   ui.Image? get image => _image;
 
-  PointsViewModel({
+  AnimatedBackgroundViewModel({
     required this.width,
     required this.height,
     required this.numPoints,
@@ -59,19 +59,19 @@ class PointsViewModel extends ChangeNotifier {
 
   void _returnPointToScreen(int i) {
     // //Возврат точек, которые попали за поле
-      if (_points[i].position.dx < -5) {
-        _points[i].velocity = Offset(1, _points[i].velocity.dy);
-      }
-      if (_points[i].position.dx > width + 5) {
-        _points[i].velocity = Offset(-1, _points[i].velocity.dy);
-      }
+    if (_points[i].position.dx < -5) {
+      _points[i].velocity = Offset(1, _points[i].velocity.dy);
+    }
+    if (_points[i].position.dx > width + 5) {
+      _points[i].velocity = Offset(-1, _points[i].velocity.dy);
+    }
 
-      if (_points[i].position.dy < -5) {
-        _points[i].velocity = Offset(_points[i].velocity.dx, 1);
-      }
-      if (_points[i].position.dy > height + 5) {
-        _points[i].velocity = Offset(_points[i].velocity.dx, -1);
-      }
+    if (_points[i].position.dy < -5) {
+      _points[i].velocity = Offset(_points[i].velocity.dx, 1);
+    }
+    if (_points[i].position.dy > height + 5) {
+      _points[i].velocity = Offset(_points[i].velocity.dx, -1);
+    }
   }
 
   void _checkingWallsCollision(int i) {

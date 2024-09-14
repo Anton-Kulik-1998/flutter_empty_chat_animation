@@ -26,14 +26,14 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => PointsViewModel(
+      create: (_) => AnimatedBackgroundViewModel(
         width: widget.width,
         height: widget.height,
         numPoints: 20,
         vsync:
             this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
       ),
-      child: Consumer<PointsViewModel>(
+      child: Consumer<AnimatedBackgroundViewModel>(
         builder: (context, viewModel, child) {
           return GestureDetector(
             onPanUpdate: (details) {
