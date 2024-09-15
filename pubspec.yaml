@@ -21,5 +21,7 @@ flutter:
 
   assets:
     - assets/images/ufo.png
+    - assets/images/1.png
+
 
 
