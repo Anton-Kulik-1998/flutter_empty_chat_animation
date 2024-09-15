@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../view_model/empty_chat/empty_chat_view_model.dart';
 import '../widgets/animated_background/animated_background.dart';
 
 class EmptyChatPage extends StatelessWidget {
@@ -10,25 +12,28 @@ class EmptyChatPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.1),
-      body: Stack(
-        children: [
-          AnimatedBackgroundWidget(
-            width: size.width,
-            height: size.height,
-          ),
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CustomScrollView(
-                slivers: [
-                  _MySliverAppBar(),
-                  _MySearchTextField(),
-                  _EmptyChatBanner(),
-                ],
+      body: ChangeNotifierProvider(
+        create: (_) => EmptyChatViewModel(),
+        child: Stack(
+          children: [
+            AnimatedBackgroundWidget(
+              width: size.width,
+              height: size.height,
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CustomScrollView(
+                  slivers: [
+                    _MySliverAppBar(),
+                    _MySearchTextField(),
+                    _EmptyChatBanner(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -69,23 +74,28 @@ class _MySearchTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Expanded(
-        child: TextField(
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            hintText: "Поиск",
-            fillColor: Colors.white,
-            filled: true,
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10),
+      child: Consumer<EmptyChatViewModel>(
+        builder: (context, viewModel, child) {
+          return TextField(
+            textInputAction: TextInputAction.search,
+            onChanged: (value) {
+              viewModel.toggleSearch();
+            },
+            decoration: InputDecoration(
+              hintText: "Поиск",
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.grey.withOpacity(0.4),
+              ),
             ),
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.grey.withOpacity(0.4),
-            ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
