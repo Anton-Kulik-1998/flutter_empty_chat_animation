@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/animated_background.dart';
 
 class AnimatedBackgroundViewModel extends ChangeNotifier {
-  final double width;
-  final double height;
+  double width;
+  double height;
   final int numPoints;
   final double maxSpeed;
   final double imageSize;
@@ -46,6 +46,16 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
 
     _controller.repeat();
     _loadImage();
+  }
+
+  // Новый метод для обновления размеров
+  void updateSize(double newWidth, double newHeight) {
+    if (newWidth != width || newHeight != height) {
+      width = newWidth;
+      height = newHeight;
+      // _initPoints(); // Пересчитываем позиции точек для новых размеров
+      notifyListeners();
+    }
   }
 
   Future<void> _loadImage() async {

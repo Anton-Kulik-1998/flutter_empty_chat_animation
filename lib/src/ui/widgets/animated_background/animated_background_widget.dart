@@ -25,33 +25,68 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AnimatedBackgroundViewModel(
-        width: widget.width,
-        height: widget.height,
-        numPoints: 20,
-        vsync:
-            this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
-      ),
-      child: Consumer<AnimatedBackgroundViewModel>(
-        builder: (context, viewModel, child) {
-          return GestureDetector(
-            onPanUpdate: (details) {
-              viewModel.onPanUpdate(details.localPosition);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ChangeNotifierProvider(
+          create: (_) => AnimatedBackgroundViewModel(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            numPoints: 20,
+            vsync:
+                this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
+          ),
+          child: Consumer<AnimatedBackgroundViewModel>(
+            builder: (context, viewModel, child) {
+              // Передаем новые значения ширины и высоты
+              viewModel.updateSize(constraints.maxWidth, constraints.maxHeight);
+              return GestureDetector(
+                onPanUpdate: (details) {
+                  viewModel.onPanUpdate(details.localPosition);
+                },
+                child: CustomPaint(
+                  painter: PointsPainter(
+                    points: viewModel.points,
+                    image: viewModel.image,
+                    imageSize: viewModel.imageSize,
+                    paintColor: Colors.black.withOpacity(0.1),
+                    lineColor: Colors.black,
+                  ),
+                  child: child,
+                ),
+              );
             },
-            child: CustomPaint(
-              painter: PointsPainter(
-                points: viewModel.points,
-                image: viewModel.image,
-                imageSize: viewModel.imageSize,
-                paintColor: Colors.black.withOpacity(0.1),
-                lineColor: Colors.black,
-              ),
-              child: child,
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// LayoutBuilder(builder: (context, constraints) {});
+
+// GestureDetector(
+//             onPanUpdate: (details) {
+//               viewModel.onPanUpdate(details.localPosition);
+//             },
+//             child: CustomPaint(
+//               painter: PointsPainter(
+//                 points: viewModel.points,
+//                 image: viewModel.image,
+//                 imageSize: viewModel.imageSize,
+//                 paintColor: Colors.black.withOpacity(0.1),
+//                 lineColor: Colors.black,
+//               ),
+//               child: child,
+//             ),
+//           );
