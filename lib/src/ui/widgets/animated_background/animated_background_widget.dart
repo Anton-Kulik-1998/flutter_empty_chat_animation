@@ -37,8 +37,13 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
           ),
           child: Consumer<AnimatedBackgroundViewModel>(
             builder: (context, viewModel, child) {
-              // Передаем новые значения ширины и высоты
-              viewModel.updateSize(constraints.maxWidth, constraints.maxHeight);
+              // Обновляем размеры только если они изменились
+              // Здесь мы используем addPostFrameCallback, чтобы обновление
+              // размеров происходило после фазы build
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                viewModel.updateSize(
+                    constraints.maxWidth, constraints.maxHeight);
+              });
               return GestureDetector(
                 onPanUpdate: (details) {
                   viewModel.onPanUpdate(details.localPosition);
@@ -62,31 +67,3 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-// LayoutBuilder(builder: (context, constraints) {});
-
-// GestureDetector(
-//             onPanUpdate: (details) {
-//               viewModel.onPanUpdate(details.localPosition);
-//             },
-//             child: CustomPaint(
-//               painter: PointsPainter(
-//                 points: viewModel.points,
-//                 image: viewModel.image,
-//                 imageSize: viewModel.imageSize,
-//                 paintColor: Colors.black.withOpacity(0.1),
-//                 lineColor: Colors.black,
-//               ),
-//               child: child,
-//             ),
-//           );
