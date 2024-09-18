@@ -1,3 +1,4 @@
+import 'dart:async'; // Для использования Timer
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -13,6 +14,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double imageSize;
   final double maxLineDistance;
   final _wallCollisionOffset = 25;
+  Timer? _resizeTimer; // Для задержки перед перезапуском анимации
 
   double get width => _width;
   double get height => _height;
@@ -58,9 +60,29 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     if (newWidth != _width || newHeight != _height) {
       _width = newWidth;
       _height = newHeight;
+      stopAnimation();
+      // Если продолжается изменение размеров, сбрасываем таймер
+      _resizeTimer?.cancel();
+      startAnimation(500);
       // _initPoints(); // Пересчитываем позиции точек для новых размеров
       notifyListeners();
     }
+  }
+
+  void startAnimation(int delay) {
+    // Устанавливаем таймер для задержки перезапуска анимации
+    _resizeTimer = Timer(
+      Duration(milliseconds: delay),
+      () {
+        _controller.repeat();
+      },
+    );
+    notifyListeners();
+  }
+
+  void stopAnimation() {
+    _controller.stop();
+    notifyListeners();
   }
 
   Future<void> _loadImage() async {
