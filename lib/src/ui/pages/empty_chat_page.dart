@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_model/empty_chat/empty_chat_view_model.dart';
+import '../theme/theme.dart';
 import '../widgets/animated_background/animated_background.dart';
 
 class EmptyChatPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class EmptyChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.1),
+      backgroundColor: AppColors.scaffoldBackground,
       body: ChangeNotifierProvider(
         create: (_) => EmptyChatViewModel(),
         child: Stack(
@@ -22,7 +23,7 @@ class EmptyChatPage extends StatelessWidget {
             ),
             const Center(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: AppConstants.paddingAll16,
                 child: CustomScrollView(
                   slivers: [
                     _MySliverAppBar(),
@@ -46,20 +47,17 @@ class _MySliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: Colors.white.withOpacity(0),
+    return const SliverAppBar(
+      backgroundColor: AppColors.appBarBackgroundTransparent,
       title: Text(
         "Чаты",
-        style: TextStyle(
-          color: Colors.black.withOpacity(0.7),
-          fontWeight: FontWeight.bold,
-          fontSize: 22,
-        ),
+        style: AppTextStyles.appBarTitle,
       ),
       actions: [
         Icon(
           Icons.settings,
-          color: Colors.black.withOpacity(0.7),
+          color: AppColors.settingsIcon,
+          size: AppConstants.iconSizeMedium,
         )
       ],
     );
@@ -81,17 +79,19 @@ class _MySearchTextField extends StatelessWidget {
             onChanged: (value) {
               viewModel.toggleSearch();
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "Поиск",
-              fillColor: Colors.white,
+              fillColor:
+                  AppColors.searchFieldBackground, // Цвет фона текстового поля
               filled: true,
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppConstants.borderRadius10,
               ),
               prefixIcon: Icon(
                 Icons.search,
-                color: Colors.grey.withOpacity(0.4),
+                color: AppColors.searchIcon, // Цвет иконки поиска
+                size: AppConstants.iconSizeMedium,
               ),
             ),
           );
@@ -111,11 +111,11 @@ class _EmptyChatBanner extends StatelessWidget {
         height: MediaQuery.of(context).size.height - 200,
         child: Center(
           child: Container(
-            width: 400,
-            height: 400,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
+            width: AppConstants.bannerWidth,
+            height: AppConstants.bannerHeight,
+            decoration: const BoxDecoration(
+              color: AppColors.chatBannerBackground,
+              borderRadius: AppConstants.borderRadius24,
             ),
             child: Center(
               child: Column(
@@ -127,7 +127,8 @@ class _EmptyChatBanner extends StatelessWidget {
                     width: 350,
                     height: 350,
                   ),
-                  const Text("chat list is empty"),
+                  const Text("chat list is empty",
+                      style: AppTextStyles.bannerText),
                 ],
               ),
             ),
