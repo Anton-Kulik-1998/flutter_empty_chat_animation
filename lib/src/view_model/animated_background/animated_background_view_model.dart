@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/animated_background.dart';
 
 class AnimatedBackgroundViewModel extends ChangeNotifier {
-  double width;
-  double height;
+  double _width;
+  double _height;
   final int numPoints;
   final double maxSpeed;
   final double imageSize;
   final double maxLineDistance;
+
+  double get width => _width;
+  double get height => _height;
 
   late List<PointModel> _points;
   ui.Image? _image;
@@ -22,14 +25,14 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   ui.Image? get image => _image;
 
   AnimatedBackgroundViewModel({
-    required this.width,
-    required this.height,
+    required double width,
+    required double height,
     required this.numPoints,
     this.maxSpeed = 0.5,
     this.imageSize = 50.0,
     this.maxLineDistance = 100.0,
     required TickerProvider vsync,
-  }) {
+  }) : _width = width, _height = height {
     _points = List.generate(numPoints, (index) {
       return PointModel(
         position:
@@ -50,9 +53,9 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
 
   // Новый метод для обновления размеров
   void updateSize(double newWidth, double newHeight) {
-    if (newWidth != width || newHeight != height) {
-      width = newWidth;
-      height = newHeight;
+    if (newWidth != _width || newHeight != _height) {
+      _width = newWidth;
+      _height = newHeight;
       // _initPoints(); // Пересчитываем позиции точек для новых размеров
       notifyListeners();
     }
@@ -72,24 +75,24 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     if (_points[i].position.dx < -5) {
       _points[i].velocity = Offset(1, _points[i].velocity.dy);
     }
-    if (_points[i].position.dx > width + 5) {
+    if (_points[i].position.dx > _width + 5) {
       _points[i].velocity = Offset(-1, _points[i].velocity.dy);
     }
 
     if (_points[i].position.dy < -5) {
       _points[i].velocity = Offset(_points[i].velocity.dx, 1);
     }
-    if (_points[i].position.dy > height + 5) {
+    if (_points[i].position.dy > _height + 5) {
       _points[i].velocity = Offset(_points[i].velocity.dx, -1);
     }
   }
 
   void _checkingWallsCollision(int i) {
-    if (_points[i].position.dx < 0 || _points[i].position.dx > width) {
+    if (_points[i].position.dx < 0 || _points[i].position.dx > _width) {
       _points[i].velocity =
           Offset(-_points[i].velocity.dx, _points[i].velocity.dy);
     }
-    if (_points[i].position.dy < 0 || _points[i].position.dy > height) {
+    if (_points[i].position.dy < 0 || _points[i].position.dy > _height) {
       _points[i].velocity =
           Offset(_points[i].velocity.dx, -_points[i].velocity.dy);
     }
