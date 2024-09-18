@@ -12,6 +12,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double maxSpeed;
   final double imageSize;
   final double maxLineDistance;
+  final _wallCollisionOffset = 25;
 
   double get width => _width;
   double get height => _height;
@@ -32,7 +33,8 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     this.imageSize = 50.0,
     this.maxLineDistance = 100.0,
     required TickerProvider vsync,
-  }) : _width = width, _height = height {
+  })  : _width = width,
+        _height = height {
     _points = List.generate(numPoints, (index) {
       return PointModel(
         position:
@@ -88,11 +90,13 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   }
 
   void _checkingWallsCollision(int i) {
-    if (_points[i].position.dx < 0 || _points[i].position.dx > _width) {
+    if (_points[i].position.dx < _wallCollisionOffset ||
+        _points[i].position.dx > _width - _wallCollisionOffset) {
       _points[i].velocity =
           Offset(-_points[i].velocity.dx, _points[i].velocity.dy);
     }
-    if (_points[i].position.dy < 0 || _points[i].position.dy > _height) {
+    if (_points[i].position.dy < _wallCollisionOffset ||
+        _points[i].position.dy > _height - _wallCollisionOffset) {
       _points[i].velocity =
           Offset(_points[i].velocity.dx, -_points[i].velocity.dy);
     }
