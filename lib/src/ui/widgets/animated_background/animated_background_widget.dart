@@ -8,12 +8,22 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double width;
   final double height;
   final Widget? child;
+  final int numPoints;
+  final double maxSpeed;
+  final String? assetImage;
+  final double imageSize;
+  final double maxLineDistance;
 
   const AnimatedBackgroundWidget({
     super.key,
+    this.child,
     required this.width,
     required this.height,
-    this.child,
+    this.numPoints = 20,
+    this.maxSpeed = 0.5,
+    this.assetImage,
+    this.imageSize = 50,
+    this.maxLineDistance = 100,
   });
 
   @override
@@ -31,7 +41,11 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
           create: (_) => AnimatedBackgroundViewModel(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
-            numPoints: 20,
+            numPoints: widget.numPoints,
+            maxSpeed: widget.maxSpeed,
+            assetImage: widget.assetImage,
+            imageSize: widget.imageSize,
+            maxLineDistance: widget.maxLineDistance,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),
@@ -66,4 +80,3 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
     );
   }
 }
-

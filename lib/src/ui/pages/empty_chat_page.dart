@@ -20,6 +20,8 @@ class EmptyChatPage extends StatelessWidget {
             AnimatedBackgroundWidget(
               width: size.width,
               height: size.height,
+              assetImage: 'assets/images/ufo.png',
+              numPoints: 20,
             ),
             const Center(
               child: Padding(

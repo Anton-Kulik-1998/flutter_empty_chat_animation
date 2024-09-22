@@ -13,6 +13,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double maxSpeed;
   final double imageSize;
   final double maxLineDistance;
+  final String? assetImage;
   final _wallCollisionOffset = 25;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
 
@@ -31,9 +32,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required double width,
     required double height,
     required this.numPoints,
-    this.maxSpeed = 0.5,
-    this.imageSize = 50.0,
-    this.maxLineDistance = 100.0,
+    required this.maxSpeed,
+    required this.imageSize,
+    required this.maxLineDistance,
+    this.assetImage,
     required TickerProvider vsync,
   })  : _width = width,
         _height = height {
@@ -52,7 +54,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     )..addListener(_updatePoints);
 
     _controller.repeat();
-    _loadImage();
+    _loadImage(assetImage);
   }
 
   // Новый метод для обновления размеров
@@ -85,15 +87,18 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _loadImage() async {
-    final ByteData data = await rootBundle.load('assets/images/ufo.png');
-    final Uint8List bytes = Uint8List.view(data.buffer);
-    ui.decodeImageFromList(bytes, (img) {
-      _image = img;
-      notifyListeners();
-    });
+  Future<void> _loadImage(String? assetImage) async {
+    if (assetImage != null && assetImage.isNotEmpty) {
+      final ByteData data = await rootBundle.load(assetImage);
+      final Uint8List bytes = Uint8List.view(data.buffer);
+      ui.decodeImageFromList(bytes, (img) {
+        _image = img;
+        notifyListeners();
+      });
+    }
   }
 
+//'assets/images/ufo.png'
   void _returnPointToScreen(int i) {
     // //Возврат точек, которые попали за поле
     if (_points[i].position.dx < -5) {
