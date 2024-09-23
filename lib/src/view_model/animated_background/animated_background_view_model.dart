@@ -15,7 +15,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double pointSize;
   final double maxLineDistance;
   final String? assetImage;
-  final _wallCollisionOffset = 25;
+  final _wallCollisionOffset = 25; //TODO: Переделать _wallCollisionOffset!
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
 
   double get width => _width;

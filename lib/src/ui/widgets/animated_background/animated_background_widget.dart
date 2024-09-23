@@ -16,6 +16,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double maxLineDistance;
   final Color paintColor;
   final Color lineColor;
+  final bool enableLines;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -30,6 +31,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.maxLineDistance = 100,
     this.paintColor = Colors.grey,
     this.lineColor = Colors.transparent,
+    this.enableLines = false,
   });
 
   @override
@@ -77,6 +79,8 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                     pointSize: viewModel.pointSize,
                     paintColor: widget.paintColor,
                     lineColor: widget.lineColor,
+                    maxDistance: widget.maxLineDistance,
+                    enableLines: widget.enableLines,
                   ),
                   child: child,
                 ),
