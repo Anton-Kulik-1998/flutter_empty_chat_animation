@@ -12,7 +12,10 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double maxSpeed;
   final String? assetImage;
   final double imageSize;
+  final double pointSize;
   final double maxLineDistance;
+  final Color paintColor;
+  final Color lineColor;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -23,7 +26,10 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.maxSpeed = 0.5,
     this.assetImage,
     this.imageSize = 50,
+    this.pointSize = 0,
     this.maxLineDistance = 100,
+    this.paintColor = Colors.grey,
+    this.lineColor = Colors.transparent,
   });
 
   @override
@@ -45,6 +51,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             maxSpeed: widget.maxSpeed,
             assetImage: widget.assetImage,
             imageSize: widget.imageSize,
+            pointSize: widget.pointSize,
             maxLineDistance: widget.maxLineDistance,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
@@ -67,8 +74,9 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                     points: viewModel.points,
                     image: viewModel.image,
                     imageSize: viewModel.imageSize,
-                    paintColor: Colors.black.withOpacity(0.1),
-                    lineColor: Colors.black,
+                    pointSize: viewModel.pointSize,
+                    paintColor: widget.paintColor,
+                    lineColor: widget.lineColor,
                   ),
                   child: child,
                 ),

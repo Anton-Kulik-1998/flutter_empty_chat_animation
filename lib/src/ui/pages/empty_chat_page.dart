@@ -22,6 +22,7 @@ class EmptyChatPage extends StatelessWidget {
               height: size.height,
               assetImage: 'assets/images/ufo.png',
               numPoints: 20,
+              paintColor: Colors.black.withOpacity(0.1),
             ),
             const Center(
               child: Padding(

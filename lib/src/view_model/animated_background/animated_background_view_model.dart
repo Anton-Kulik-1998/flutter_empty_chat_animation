@@ -12,6 +12,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final int numPoints;
   final double maxSpeed;
   final double imageSize;
+  final double pointSize;
   final double maxLineDistance;
   final String? assetImage;
   final _wallCollisionOffset = 25;
@@ -34,6 +35,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.numPoints,
     required this.maxSpeed,
     required this.imageSize,
+    required this.pointSize,
     required this.maxLineDistance,
     this.assetImage,
     required TickerProvider vsync,

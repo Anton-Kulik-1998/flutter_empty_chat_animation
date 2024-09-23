@@ -7,6 +7,7 @@ class PointsPainter extends CustomPainter {
   final List<PointModel> points;
   final ui.Image? image;
   final double imageSize;
+  final double pointSize;
   final Color paintColor;
   final Color lineColor;
 
@@ -14,6 +15,7 @@ class PointsPainter extends CustomPainter {
     required this.points,
     required this.image,
     required this.imageSize,
+    required this.pointSize,
     required this.paintColor,
     required this.lineColor,
   });
@@ -35,6 +37,11 @@ class PointsPainter extends CustomPainter {
           height: imageSize,
         );
         canvas.drawImageRect(image!, srcRect, dstRect, paint);
+      }
+    } else {
+      // Draw points
+      for (final point in points) {
+        canvas.drawCircle(point.position, pointSize, paint);
       }
     }
   }
