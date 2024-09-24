@@ -19,6 +19,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final bool stopResizingAnimation;
   final bool enableTouchReaction;
   final double touchSpeedMultiplier;
+  final CustomPaint? customPaint;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -36,6 +37,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.stopResizingAnimation = false,
     this.enableTouchReaction = false,
     this.touchSpeedMultiplier = 1,
+    this.customPaint,
   });
 
   @override
@@ -66,6 +68,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             stopResizingAnimation: widget.stopResizingAnimation,
             enableTouchReaction: widget.enableTouchReaction,
             touchSpeedMultiplier: widget.touchSpeedMultiplier,
+            customPaint: widget.customPaint,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),
@@ -73,7 +76,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             builder: (context, viewModel, child) {
               // Обновляем размеры только если они изменились
               // Здесь мы используем addPostFrameCallback, чтобы обновление
-              // размеров происходило после фазы build
+              // размеров происходило после текущей фазы build
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 viewModel.updateSize(
                     constraints.maxWidth, constraints.maxHeight);
@@ -82,7 +85,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                 onPanUpdate: (details) {
                   viewModel.onPanUpdate(details.localPosition);
                 },
-                child: CustomPaint(
+                child: viewModel.customPaint ?? CustomPaint(
                   painter: PointsPainter(
                     points: viewModel.points,
                     image: viewModel.image,
