@@ -22,6 +22,8 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double maxDistance;
   final bool enableLines;
   final bool stopResizingAnimation;
+  final bool enableTouchReaction;
+  final double touchSpeedMultiplier;
 
   double get width => _width;
   double get height => _height;
@@ -48,6 +50,8 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.maxDistance,
     required this.enableLines,
     required this.stopResizingAnimation,
+    required this.enableTouchReaction,
+    required this.touchSpeedMultiplier,
     required TickerProvider vsync,
   })  : _width = width,
         _height = height {
@@ -185,11 +189,14 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   }
 
   void onPanUpdate(Offset touchPosition) {
-    for (int i = 0; i < _points.length; i++) {
-      final distance = (touchPosition - _points[i].position).distance;
-      if (distance < maxLineDistance) {
-        final direction = _points[i].position - touchPosition;
-        _points[i].velocity = direction * (maxSpeed / direction.distance);
+    if (enableTouchReaction) {
+      for (int i = 0; i < _points.length; i++) {
+        final distance = (touchPosition - _points[i].position).distance;
+        if (distance < maxLineDistance) {
+          final direction = _points[i].position - touchPosition;
+          _points[i].velocity = direction *
+              (maxSpeed * touchSpeedMultiplier / direction.distance);
+        }
       }
     }
   }

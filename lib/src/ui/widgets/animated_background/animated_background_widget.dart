@@ -7,7 +7,6 @@ import '../components/components.dart'; // Для связи с ViewModel
 class AnimatedBackgroundWidget extends StatefulWidget {
   final double width;
   final double height;
-  final Widget? child;
   final int numPoints;
   final double maxSpeed;
   final String? assetImage;
@@ -18,10 +17,11 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final Color lineColor;
   final bool enableLines;
   final bool stopResizingAnimation;
+  final bool enableTouchReaction;
+  final double touchSpeedMultiplier;
 
   const AnimatedBackgroundWidget({
     super.key,
-    this.child,
     required this.width,
     required this.height,
     this.numPoints = 20,
@@ -34,6 +34,8 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.lineColor = Colors.transparent,
     this.enableLines = false,
     this.stopResizingAnimation = false,
+    this.enableTouchReaction = false,
+    this.touchSpeedMultiplier = 1,
   });
 
   @override
@@ -62,6 +64,8 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             maxDistance: widget.maxLineDistance,
             enableLines: widget.enableLines,
             stopResizingAnimation: widget.stopResizingAnimation,
+            enableTouchReaction: widget.enableTouchReaction,
+            touchSpeedMultiplier: widget.touchSpeedMultiplier,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),
@@ -89,7 +93,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                     maxDistance: viewModel.maxLineDistance,
                     enableLines: viewModel.enableLines,
                   ),
-                  child: child,
+                  child: Container(),
                 ),
               );
             },
