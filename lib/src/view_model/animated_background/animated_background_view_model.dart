@@ -17,6 +17,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final String? assetImage;
   final _wallCollisionOffset = 25; //TODO: Переделать _wallCollisionOffset!
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
+  final Color paintColor;
+  final Color lineColor;
+  final double maxDistance;
+  final bool enableLines;
 
   double get width => _width;
   double get height => _height;
@@ -38,6 +42,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.pointSize,
     required this.maxLineDistance,
     this.assetImage,
+    required this.paintColor,
+    required this.lineColor,
+    required this.maxDistance,
+    required this.enableLines,
     required TickerProvider vsync,
   })  : _width = width,
         _height = height {
