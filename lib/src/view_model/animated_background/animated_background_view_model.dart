@@ -21,6 +21,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final Color lineColor;
   final double maxDistance;
   final bool enableLines;
+  final bool stopResizingAnimation;
 
   double get width => _width;
   double get height => _height;
@@ -46,6 +47,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.lineColor,
     required this.maxDistance,
     required this.enableLines,
+    required this.stopResizingAnimation,
     required TickerProvider vsync,
   })  : _width = width,
         _height = height {
@@ -72,11 +74,12 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     if (newWidth != _width || newHeight != _height) {
       _width = newWidth;
       _height = newHeight;
-      stopAnimation();
-      // Если продолжается изменение размеров, сбрасываем таймер
-      _resizeTimer?.cancel();
-      startAnimation(500);
-      // _initPoints(); // Пересчитываем позиции точек для новых размеров
+      if (stopResizingAnimation) {
+        stopAnimation();
+        // Если продолжается изменение размеров, сбрасываем таймер
+        _resizeTimer?.cancel();
+        startAnimation(500);
+      }
       notifyListeners();
     }
   }

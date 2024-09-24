@@ -17,6 +17,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final Color paintColor;
   final Color lineColor;
   final bool enableLines;
+  final bool stopResizingAnimation;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -32,6 +33,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.paintColor = Colors.grey,
     this.lineColor = Colors.transparent,
     this.enableLines = false,
+    this.stopResizingAnimation = false,
   });
 
   @override
@@ -59,6 +61,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             lineColor: widget.lineColor,
             maxDistance: widget.maxLineDistance,
             enableLines: widget.enableLines,
+            stopResizingAnimation: widget.stopResizingAnimation,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),
