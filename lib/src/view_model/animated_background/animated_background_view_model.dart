@@ -117,25 +117,42 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     }
   }
 
-//'assets/images/ufo.png'
-  void _returnPointToScreen(int i) {
-    // //Возврат точек, которые попали за поле
-    if (_points[i].position.dx < -5) {
-      _points[i].velocity = Offset(1, _points[i].velocity.dy);
-    }
-    if (_points[i].position.dx > _width + 5) {
-      _points[i].velocity = Offset(-1, _points[i].velocity.dy);
-    }
-
-    if (_points[i].position.dy < -5) {
-      _points[i].velocity = Offset(_points[i].velocity.dx, 1);
-    }
-    if (_points[i].position.dy > _height + 5) {
-      _points[i].velocity = Offset(_points[i].velocity.dx, -1);
+  void _isReturnToScreenCheck(int i) {
+    // Если точка полностью вернулась на экран, сбрасываем флаг
+    if (_points[i].position.dx >= _wallCollisionOffset &&
+        _points[i].position.dx <= _width - _wallCollisionOffset &&
+        _points[i].position.dy >= _wallCollisionOffset &&
+        _points[i].position.dy <= _height - _wallCollisionOffset) {
+      _points[i].isOutOfScreen = false;
     }
   }
 
+  void _returnPointToScreen(int i, double enableOffset) {
+    // //Возврат точек, которые попали за поле
+    if (_points[i].position.dx < -enableOffset) {
+      _points[i].velocity = Offset(1, _points[i].velocity.dy);
+      _points[i].isOutOfScreen = true;
+    }
+    if (_points[i].position.dx > _width + enableOffset) {
+      _points[i].velocity = Offset(-1, _points[i].velocity.dy);
+      _points[i].isOutOfScreen = true;
+    }
+
+    if (_points[i].position.dy < -enableOffset) {
+      _points[i].velocity = Offset(_points[i].velocity.dx, 1);
+      _points[i].isOutOfScreen = true;
+    }
+    if (_points[i].position.dy > _height + enableOffset) {
+      _points[i].velocity = Offset(_points[i].velocity.dx, -1);
+      _points[i].isOutOfScreen = true;
+    }
+    _isReturnToScreenCheck(i);
+  }
+
   void _checkingWallsCollision(int i) {
+    // Проверяем, если точка за экраном, столкновение не проверяется
+    if (_points[i].isOutOfScreen) return;
+
     if (_points[i].position.dx < _wallCollisionOffset ||
         _points[i].position.dx > _width - _wallCollisionOffset) {
       _points[i].velocity =
@@ -182,7 +199,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
       _checkingWallsCollision(i);
 
       // Возврат точки обратно на видимую часть экрана, если она вылетела
-      _returnPointToScreen(i);
+      _returnPointToScreen(i, 5);
 
       // Проверка на столкновение с другими изображениями
       _checkingImageCollision(i);
