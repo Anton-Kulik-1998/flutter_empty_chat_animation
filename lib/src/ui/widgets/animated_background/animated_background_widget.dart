@@ -10,6 +10,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final int numPoints;
   final double maxSpeed;
   final String? assetImage;
+  final double wallCollisionOffset;
   final double imageSize;
   final double pointSize;
   final double maxLineDistance;
@@ -28,6 +29,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.numPoints = 20,
     this.maxSpeed = 0.5,
     this.assetImage,
+    this.wallCollisionOffset = 0,
     this.imageSize = 50,
     this.pointSize = 0,
     this.maxLineDistance = 100,
@@ -58,6 +60,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             numPoints: widget.numPoints,
             maxSpeed: widget.maxSpeed,
             assetImage: widget.assetImage,
+            wallCollisionOffset: widget.wallCollisionOffset,
             imageSize: widget.imageSize,
             pointSize: widget.pointSize,
             maxLineDistance: widget.maxLineDistance,

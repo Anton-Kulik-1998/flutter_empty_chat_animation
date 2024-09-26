@@ -15,7 +15,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double pointSize;
   final double maxLineDistance;
   final String? assetImage;
-  final _wallCollisionOffset = 25; //TODO: Переделать _wallCollisionOffset!
+  final double wallCollisionOffset;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
   final Color paintColor;
   final Color lineColor;
@@ -46,6 +46,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.pointSize,
     required this.maxLineDistance,
     this.assetImage,
+    required this.wallCollisionOffset,
     required this.paintColor,
     required this.lineColor,
     required this.maxDistance,
@@ -119,10 +120,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
 
   void _isReturnToScreenCheck(int i) {
     // Если точка полностью вернулась на экран, сбрасываем флаг
-    if (_points[i].position.dx >= _wallCollisionOffset &&
-        _points[i].position.dx <= _width - _wallCollisionOffset &&
-        _points[i].position.dy >= _wallCollisionOffset &&
-        _points[i].position.dy <= _height - _wallCollisionOffset) {
+    if (_points[i].position.dx >= wallCollisionOffset &&
+        _points[i].position.dx <= _width - wallCollisionOffset &&
+        _points[i].position.dy >= wallCollisionOffset &&
+        _points[i].position.dy <= _height - wallCollisionOffset) {
       _points[i].isOutOfScreen = false;
     }
   }
@@ -153,13 +154,13 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     // Проверяем, если точка за экраном, столкновение не проверяется
     if (_points[i].isOutOfScreen) return;
 
-    if (_points[i].position.dx < _wallCollisionOffset ||
-        _points[i].position.dx > _width - _wallCollisionOffset) {
+    if (_points[i].position.dx < wallCollisionOffset ||
+        _points[i].position.dx > _width - wallCollisionOffset) {
       _points[i].velocity =
           Offset(-_points[i].velocity.dx, _points[i].velocity.dy);
     }
-    if (_points[i].position.dy < _wallCollisionOffset ||
-        _points[i].position.dy > _height - _wallCollisionOffset) {
+    if (_points[i].position.dy < wallCollisionOffset ||
+        _points[i].position.dy > _height - wallCollisionOffset) {
       _points[i].velocity =
           Offset(_points[i].velocity.dx, -_points[i].velocity.dy);
     }

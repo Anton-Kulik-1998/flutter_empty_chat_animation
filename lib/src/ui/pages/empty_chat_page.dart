@@ -23,6 +23,7 @@ class EmptyChatPage extends StatelessWidget {
               assetImage: 'assets/images/ufo.png',
               numPoints: 20,
               paintColor: Colors.black.withOpacity(0.1),
+              wallCollisionOffset: 25,
               stopResizingAnimation: true,
             ),
             const Center(
