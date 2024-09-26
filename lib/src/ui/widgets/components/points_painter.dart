@@ -15,6 +15,7 @@ class PointsPainter extends CustomPainter {
   final Color lineColor;
   final double maxDistance;
   final bool enableLines;
+  final bool lineColorFading;
 
   PointsPainter({
     required this.points,
@@ -25,6 +26,7 @@ class PointsPainter extends CustomPainter {
     required this.lineColor,
     required this.maxDistance,
     required this.enableLines,
+    required this.lineColorFading,
   });
 
   void _addLines(Canvas canvas, Paint paint) {
@@ -33,7 +35,9 @@ class PointsPainter extends CustomPainter {
       for (int j = i + 1; j < points.length; j++) {
         final distance = (points[i].position - points[j].position).distance;
         if (distance < maxDistance) {
-          paint.color = lineColor.withOpacity(1.0 - (distance / maxDistance));
+          paint.color = lineColorFading
+              ? lineColor.withOpacity(1.0 - (distance / maxDistance))
+              : lineColor;
           canvas.drawLine(points[i].position, points[j].position, paint);
         }
       }

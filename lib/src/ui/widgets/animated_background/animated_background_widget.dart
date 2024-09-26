@@ -16,6 +16,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double maxLineDistance;
   final Color paintColor;
   final Color lineColor;
+  final bool lineColorFading;
   final bool enableLines;
   final bool stopResizingAnimation;
   final bool enableTouchReaction;
@@ -35,6 +36,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.maxLineDistance = 100,
     this.paintColor = Colors.grey,
     this.lineColor = Colors.transparent,
+    this.lineColorFading = true,
     this.enableLines = false,
     this.stopResizingAnimation = false,
     this.enableTouchReaction = false,
@@ -66,6 +68,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             maxLineDistance: widget.maxLineDistance,
             paintColor: widget.paintColor,
             lineColor: widget.lineColor,
+            lineColorFading: widget.lineColorFading,
             maxDistance: widget.maxLineDistance,
             enableLines: widget.enableLines,
             stopResizingAnimation: widget.stopResizingAnimation,
@@ -96,6 +99,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                     pointSize: viewModel.pointSize,
                     paintColor: viewModel.paintColor,
                     lineColor: viewModel.lineColor,
+                    lineColorFading: viewModel.lineColorFading,
                     maxDistance: viewModel.maxLineDistance,
                     enableLines: viewModel.enableLines,
                   ),
