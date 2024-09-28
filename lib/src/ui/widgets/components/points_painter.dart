@@ -16,6 +16,7 @@ class PointsPainter extends CustomPainter {
   final double maxDistance;
   final bool enableLines;
   final bool lineColorFading;
+  final bool imagesLoaded;
 
   PointsPainter({
     required this.points,
@@ -27,6 +28,7 @@ class PointsPainter extends CustomPainter {
     required this.maxDistance,
     required this.enableLines,
     required this.lineColorFading,
+    required this.imagesLoaded,
   });
 
   void _addLines(Canvas canvas, Paint paint) {
@@ -82,9 +84,7 @@ class PointsPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.0;
 
-    (images.isNotEmpty)
-        ? _drawImages(canvas, paint)
-        : _drawPoints(canvas, paint);
+    (imagesLoaded) ? _drawImages(canvas, paint) : _drawPoints(canvas, paint);
 
     if (enableLines) _addLines(canvas, paint);
   }

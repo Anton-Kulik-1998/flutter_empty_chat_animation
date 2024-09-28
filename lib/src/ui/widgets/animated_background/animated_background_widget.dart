@@ -91,20 +91,22 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                 onPanUpdate: (details) {
                   viewModel.onPanUpdate(details.localPosition);
                 },
-                child: viewModel.customPaint ?? CustomPaint(
-                  painter: PointsPainter(
-                    points: viewModel.points,
-                    images: viewModel.images,
-                    imageSize: viewModel.imageSize,
-                    pointSize: viewModel.pointSize,
-                    paintColor: viewModel.paintColor,
-                    lineColor: viewModel.lineColor,
-                    lineColorFading: viewModel.lineColorFading,
-                    maxDistance: viewModel.maxLineDistance,
-                    enableLines: viewModel.enableLines,
-                  ),
-                  child: Container(),
-                ),
+                child: viewModel.customPaint ??
+                    CustomPaint(
+                      painter: PointsPainter(
+                        points: viewModel.points,
+                        images: viewModel.images,
+                        imageSize: viewModel.imageSize,
+                        pointSize: viewModel.pointSize,
+                        paintColor: viewModel.paintColor,
+                        lineColor: viewModel.lineColor,
+                        lineColorFading: viewModel.lineColorFading,
+                        maxDistance: viewModel.maxLineDistance,
+                        enableLines: viewModel.enableLines,
+                        imagesLoaded: viewModel.imagesLoaded,
+                      ),
+                      child: Container(),
+                    ),
               );
             },
           ),

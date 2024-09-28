@@ -35,6 +35,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final Random _random = Random();
   late AnimationController _controller;
 
+  // Флаг для отслеживания загрузки изображений
+  bool _imagesLoaded = false;
+  bool get imagesLoaded => _imagesLoaded; // Геттер для доступа к флагу
+
   List<PointModel> get points => _points;
   List<ui.Image> get images => _images; // Геттер для доступа к изображениям
 
@@ -127,7 +131,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
         _images.add(image); // Добавляем загруженное изображение в список
       }
     }
-
+    _imagesLoaded = true;
     notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
   }
 
