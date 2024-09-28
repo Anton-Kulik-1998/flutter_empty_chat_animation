@@ -17,6 +17,7 @@ class PointsPainter extends CustomPainter {
   final bool enableLines;
   final bool lineColorFading;
   final bool imagesLoaded;
+  final double opacityAnimation;
 
   PointsPainter({
     required this.points,
@@ -29,6 +30,7 @@ class PointsPainter extends CustomPainter {
     required this.enableLines,
     required this.lineColorFading,
     required this.imagesLoaded,
+    required this.opacityAnimation,
   });
 
   void _addLines(Canvas canvas, Paint paint) {
@@ -38,8 +40,12 @@ class PointsPainter extends CustomPainter {
         final distance = (points[i].position - points[j].position).distance;
         if (distance < maxDistance) {
           paint.color = lineColorFading
-              ? lineColor.withOpacity(1.0 - (distance / maxDistance))
-              : lineColor;
+              ? lineColor.withOpacity(
+                  opacityAnimation * (1.0 - (distance / maxDistance)))
+              : lineColor.withOpacity(opacityAnimation);
+          // if (opacity < 0.1) {
+          //   paint.color = paint.color.withOpacity(opacity); // Прозрачность
+          // }
           canvas.drawLine(points[i].position, points[j].position, paint);
         }
       }
@@ -60,6 +66,8 @@ class PointsPainter extends CustomPainter {
     }
 
     for (final point in points) {
+      paint.color =
+          paint.color.withOpacity(opacityAnimation / 10); // Прозрачность
       // Случайным образом выбираем изображение из списка
       final randomImage = images[point.imageNum];
 

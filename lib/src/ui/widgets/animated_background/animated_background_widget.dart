@@ -50,7 +50,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
 }
 
 class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -104,6 +104,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                         maxDistance: viewModel.maxLineDistance,
                         enableLines: viewModel.enableLines,
                         imagesLoaded: viewModel.imagesLoaded,
+                        opacityAnimation: viewModel.opacityAnimation,
                       ),
                       child: Container(),
                     ),

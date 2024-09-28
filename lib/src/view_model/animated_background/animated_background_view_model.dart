@@ -35,6 +35,13 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final Random _random = Random();
   late AnimationController _controller;
 
+  late AnimationController
+      _opacityController; // Контроллер для анимации прозрачности
+  late Animation<double> _opacityAnimation; // Анимация прозрачности
+
+  double get opacityAnimation =>
+      _opacityAnimation.value; // Текущее значение прозрачности
+
   // Флаг для отслеживания загрузки изображений
   bool _imagesLoaded = false;
   bool get imagesLoaded => _imagesLoaded; // Геттер для доступа к флагу
@@ -72,6 +79,19 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
               _random.nextDouble() * maxSpeed * 2 - maxSpeed),
           imageNum: _random.nextInt(assetImages.length));
     });
+
+    _opacityController = AnimationController(
+      vsync: vsync,
+      duration: const Duration(seconds: 2),
+    );
+
+    _opacityAnimation =
+        Tween<double>(begin: 0, end: 1).animate(_opacityController)
+          ..addListener(() {
+            notifyListeners();
+          });
+
+    _opacityController.forward(); // Запуск анимации прозрачности
 
     _controller = AnimationController(
       vsync: vsync,
@@ -241,6 +261,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _controller.dispose();
+    _opacityController.dispose();
     super.dispose();
   }
 }

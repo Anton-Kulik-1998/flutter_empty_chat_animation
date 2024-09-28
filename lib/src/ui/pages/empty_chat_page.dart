@@ -22,9 +22,12 @@ class EmptyChatPage extends StatelessWidget {
               height: size.height,
               assetImages: const [
                 'assets/images/ufo.png',
-                'assets/images/1.png'
+                // 'assets/images/1.png'
               ],
               numPoints: 20,
+              enableLines: true,
+              maxLineDistance: 500,
+              lineColor: Colors.black.withOpacity(0.1),
               paintColor: Colors.black.withOpacity(0.1),
               wallCollisionOffset: 25,
               stopResizingAnimation: true,
