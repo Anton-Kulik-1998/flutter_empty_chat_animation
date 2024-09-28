@@ -9,7 +9,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double height;
   final int numPoints;
   final double maxSpeed;
-  final String? assetImage;
+  final List<String> assetImages;
   final double wallCollisionOffset;
   final double imageSize;
   final double pointSize;
@@ -29,7 +29,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     required this.height,
     this.numPoints = 20,
     this.maxSpeed = 0.5,
-    this.assetImage,
+    this.assetImages = const [],
     this.wallCollisionOffset = 0,
     this.imageSize = 50,
     this.pointSize = 0,
@@ -61,7 +61,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             height: constraints.maxHeight,
             numPoints: widget.numPoints,
             maxSpeed: widget.maxSpeed,
-            assetImage: widget.assetImage,
+            assetImages: widget.assetImages,
             wallCollisionOffset: widget.wallCollisionOffset,
             imageSize: widget.imageSize,
             pointSize: widget.pointSize,
@@ -94,7 +94,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                 child: viewModel.customPaint ?? CustomPaint(
                   painter: PointsPainter(
                     points: viewModel.points,
-                    image: viewModel.image,
+                    images: viewModel.images,
                     imageSize: viewModel.imageSize,
                     pointSize: viewModel.pointSize,
                     paintColor: viewModel.paintColor,

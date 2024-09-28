@@ -14,7 +14,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double imageSize;
   final double pointSize;
   final double maxLineDistance;
-  final String? assetImage;
+  final List<String> assetImages;
   final double wallCollisionOffset;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
   final Color paintColor;
@@ -31,12 +31,12 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   double get height => _height;
 
   late List<PointModel> _points;
-  ui.Image? _image;
+  final List<ui.Image> _images = []; // Список загруженных изображений
   final Random _random = Random();
   late AnimationController _controller;
 
   List<PointModel> get points => _points;
-  ui.Image? get image => _image;
+  List<ui.Image> get images => _images; // Геттер для доступа к изображениям
 
   AnimatedBackgroundViewModel({
     required double width,
@@ -46,7 +46,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.imageSize,
     required this.pointSize,
     required this.maxLineDistance,
-    this.assetImage,
+    required this.assetImages,
     required this.wallCollisionOffset,
     required this.paintColor,
     required this.lineColor,
@@ -62,20 +62,19 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
         _height = height {
     _points = List.generate(numPoints, (index) {
       return PointModel(
-        position:
-            Offset(_random.nextDouble() * width, _random.nextDouble() * height),
-        velocity: Offset(_random.nextDouble() * maxSpeed * 2 - maxSpeed,
-            _random.nextDouble() * maxSpeed * 2 - maxSpeed),
-      );
+          position: Offset(
+              _random.nextDouble() * width, _random.nextDouble() * height),
+          velocity: Offset(_random.nextDouble() * maxSpeed * 2 - maxSpeed,
+              _random.nextDouble() * maxSpeed * 2 - maxSpeed),
+          imageNum: _random.nextInt(assetImages.length));
     });
 
     _controller = AnimationController(
       vsync: vsync,
       duration: const Duration(seconds: 1),
     )..addListener(_updatePoints);
-
     _controller.repeat();
-    _loadImage(assetImage);
+    _loadImages(assetImages);
   }
 
   // Новый метод для обновления размеров
@@ -109,15 +108,27 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _loadImage(String? assetImage) async {
-    if (assetImage != null && assetImage.isNotEmpty) {
-      final ByteData data = await rootBundle.load(assetImage);
-      final Uint8List bytes = Uint8List.view(data.buffer);
-      ui.decodeImageFromList(bytes, (img) {
-        _image = img;
-        notifyListeners();
-      });
+  // Метод для загрузки списка изображений
+  Future<void> _loadImages(List<String> assetImages) async {
+    _images.clear(); // Очищаем список перед загрузкой новых изображений
+
+    for (String assetImage in assetImages) {
+      if (assetImage.isNotEmpty) {
+        final ByteData data = await rootBundle.load(assetImage);
+        final Uint8List bytes = Uint8List.view(data.buffer);
+
+        // Используем Future для ожидания загрузки каждого изображения
+        final completer = Completer<ui.Image>();
+        ui.decodeImageFromList(bytes, (img) {
+          completer.complete(img);
+        });
+
+        final image = await completer.future;
+        _images.add(image); // Добавляем загруженное изображение в список
+      }
     }
+
+    notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
   }
 
   void _isReturnToScreenCheck(int i) {
