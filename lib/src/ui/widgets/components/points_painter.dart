@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/
 
 class PointsPainter extends CustomPainter {
   final List<PointModel> points;
-  final List<ui.Image> images;
+  final List<ui.Image> images; // Список изображений
   final double imageSize;
   final double pointSize;
   final Color paintColor;
@@ -38,6 +39,8 @@ class PointsPainter extends CustomPainter {
     required this.pointOpacity,
     required this.imageOpacity,
   });
+
+  final Random _random = Random();
 
   void _addLines(Canvas canvas, Paint paint) {
     // Draw lines between nearest points
@@ -70,14 +73,11 @@ class PointsPainter extends CustomPainter {
     }
 
     for (final point in points) {
-      paint.color = paint.color
-          .withOpacity(opacityAnimation * imageOpacity); // Прозрачность
-      // Случайным образом выбираем изображение из списка
-      final randomImage = images[point.imageNum];
+      point.selectedImage ??= images[_random.nextInt(images.length)];
 
       // Определяем исходный и целевой прямоугольники для отрисовки изображения
-      final srcRect = Rect.fromLTWH(
-          0, 0, randomImage.width.toDouble(), randomImage.height.toDouble());
+      final srcRect = Rect.fromLTWH(0, 0, point.selectedImage!.width.toDouble(),
+          point.selectedImage!.height.toDouble());
       final dstRect = Rect.fromCenter(
         center: point.position,
         width: imageSize,
@@ -85,7 +85,7 @@ class PointsPainter extends CustomPainter {
       );
 
       // Рисуем выбранное изображение
-      canvas.drawImageRect(randomImage, srcRect, dstRect, paint);
+      canvas.drawImageRect(point.selectedImage!, srcRect, dstRect, paint);
     }
   }
 
@@ -96,6 +96,7 @@ class PointsPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.0;
 
+    // Если изображения присутствуют, рисуем их, иначе рисуем точки
     (imagesLoaded) ? _drawImages(canvas, paint) : _drawPoints(canvas, paint);
 
     if (enableLines) _addLines(canvas, paint);

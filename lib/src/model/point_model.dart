@@ -4,11 +4,11 @@ class PointModel {
   Offset position;
   Offset velocity;
   bool isOutOfScreen = false;
-  int imageNum;
+  Image? selectedImage;
 
   PointModel({
     required this.position,
     required this.velocity,
-    required this.imageNum,
+    this.selectedImage
   });
 }

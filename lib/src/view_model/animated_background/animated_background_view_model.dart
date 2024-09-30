@@ -14,7 +14,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double imageSize;
   final double pointSize;
   final double maxLineDistance;
-  final List<String> assetImages;
+  final List<String>? assetImage;
   final double wallCollisionOffset;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
   final Color paintColor;
@@ -51,6 +51,10 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
 
   List<PointModel> get points => _points;
   List<ui.Image> get images => _images; // Геттер для доступа к изображениям
+
+  // Флаг для отслеживания загрузки изображений
+  bool _imagesLoaded = false;
+  bool get imagesLoaded => _imagesLoaded; // Геттер для доступа к флагу
 
   AnimatedBackgroundViewModel({
     required double width,
@@ -104,7 +108,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
       duration: const Duration(seconds: 1),
     )..addListener(_updatePoints);
     _controller.repeat();
-    _loadImages(assetImages);
+    _loadImages(assetImage);
   }
 
   // Новый метод для обновления размеров
@@ -139,23 +143,28 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   }
 
   // Метод для загрузки списка изображений
-  Future<void> _loadImages(List<String> assetImages) async {
+  Future<void> _loadImages(List<String>? assetImages) async {
     _images.clear(); // Очищаем список перед загрузкой новых изображений
 
-    for (String assetImage in assetImages) {
-      if (assetImage.isNotEmpty) {
-        final ByteData data = await rootBundle.load(assetImage);
-        final Uint8List bytes = Uint8List.view(data.buffer);
+    if (assetImages != null) {
+      for (String assetImage in assetImages) {
+        if (assetImage.isNotEmpty) {
+          final ByteData data = await rootBundle.load(assetImage);
+          final Uint8List bytes = Uint8List.view(data.buffer);
 
-        // Используем Future для ожидания загрузки каждого изображения
-        final completer = Completer<ui.Image>();
-        ui.decodeImageFromList(bytes, (img) {
-          completer.complete(img);
-        });
+          // Используем Future для ожидания загрузки каждого изображения
+          final completer = Completer<ui.Image>();
+          ui.decodeImageFromList(bytes, (img) {
+            completer.complete(img);
+          });
 
-        final image = await completer.future;
-        _images.add(image); // Добавляем загруженное изображение в список
+          final image = await completer.future;
+          _images.add(image); // Добавляем загруженное изображение в список
+        }
       }
+
+      _imagesLoaded = true;
+      notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
     }
     _imagesLoaded = true;
     notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
