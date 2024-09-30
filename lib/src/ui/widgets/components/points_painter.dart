@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/
 
 class PointsPainter extends CustomPainter {
   final List<PointModel> points;
-  final ui.Image? image;
+  final List<ui.Image> images; // Список изображений
   final double imageSize;
   final double pointSize;
   final Color paintColor;
@@ -16,10 +17,11 @@ class PointsPainter extends CustomPainter {
   final double maxDistance;
   final bool enableLines;
   final bool lineColorFading;
+  final bool imagesLoaded;
 
   PointsPainter({
     required this.points,
-    required this.image,
+    required this.images,
     required this.imageSize,
     required this.pointSize,
     required this.paintColor,
@@ -27,7 +29,10 @@ class PointsPainter extends CustomPainter {
     required this.maxDistance,
     required this.enableLines,
     required this.lineColorFading,
+    required this.imagesLoaded,
   });
+
+  final Random _random = Random();
 
   void _addLines(Canvas canvas, Paint paint) {
     // Draw lines between nearest points
@@ -52,15 +57,25 @@ class PointsPainter extends CustomPainter {
   }
 
   void _drawImages(Canvas canvas, Paint paint) {
+    // Проверяем, что список изображений не пуст
+    if (images.isEmpty) {
+      return; // Если нет изображений, не рисуем
+    }
+
     for (final point in points) {
-      final srcRect = Rect.fromLTWH(
-          0, 0, image!.width.toDouble(), image!.height.toDouble());
+      point.selectedImage ??= images[_random.nextInt(images.length)];
+
+      // Определяем исходный и целевой прямоугольники для отрисовки изображения
+      final srcRect = Rect.fromLTWH(0, 0, point.selectedImage!.width.toDouble(),
+          point.selectedImage!.height.toDouble());
       final dstRect = Rect.fromCenter(
         center: point.position,
         width: imageSize,
         height: imageSize,
       );
-      canvas.drawImageRect(image!, srcRect, dstRect, paint);
+
+      // Рисуем выбранное изображение
+      canvas.drawImageRect(point.selectedImage!, srcRect, dstRect, paint);
     }
   }
 
@@ -71,7 +86,8 @@ class PointsPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.0;
 
-    (image != null) ? _drawImages(canvas, paint) : _drawPoints(canvas, paint);
+    // Если изображения присутствуют, рисуем их, иначе рисуем точки
+    (imagesLoaded) ? _drawImages(canvas, paint) : _drawPoints(canvas, paint);
 
     if (enableLines) _addLines(canvas, paint);
   }
