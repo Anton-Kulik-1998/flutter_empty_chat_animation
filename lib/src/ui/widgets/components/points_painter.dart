@@ -18,6 +18,9 @@ class PointsPainter extends CustomPainter {
   final bool lineColorFading;
   final bool imagesLoaded;
   final double opacityAnimation;
+  final double lineOpacity;
+  final double pointOpacity;
+  final double imageOpacity;
 
   PointsPainter({
     required this.points,
@@ -31,6 +34,9 @@ class PointsPainter extends CustomPainter {
     required this.lineColorFading,
     required this.imagesLoaded,
     required this.opacityAnimation,
+    required this.lineOpacity,
+    required this.pointOpacity,
+    required this.imageOpacity,
   });
 
   void _addLines(Canvas canvas, Paint paint) {
@@ -40,12 +46,9 @@ class PointsPainter extends CustomPainter {
         final distance = (points[i].position - points[j].position).distance;
         if (distance < maxDistance) {
           paint.color = lineColorFading
-              ? lineColor.withOpacity(
-                  opacityAnimation * (1.0 - (distance / maxDistance)))
-              : lineColor.withOpacity(opacityAnimation);
-          // if (opacity < 0.1) {
-          //   paint.color = paint.color.withOpacity(opacity); // Прозрачность
-          // }
+              ? lineColor.withOpacity((opacityAnimation * lineOpacity) *
+                  (1.0 - (distance / maxDistance)))
+              : lineColor.withOpacity(opacityAnimation * lineOpacity);
           canvas.drawLine(points[i].position, points[j].position, paint);
         }
       }
@@ -55,6 +58,7 @@ class PointsPainter extends CustomPainter {
   void _drawPoints(Canvas canvas, Paint paint) {
     // Draw points
     for (final point in points) {
+      paint.color = paint.color.withOpacity(opacityAnimation * pointOpacity);
       canvas.drawCircle(point.position, pointSize, paint);
     }
   }
@@ -66,8 +70,8 @@ class PointsPainter extends CustomPainter {
     }
 
     for (final point in points) {
-      paint.color =
-          paint.color.withOpacity(opacityAnimation / 10); // Прозрачность
+      paint.color = paint.color
+          .withOpacity(opacityAnimation * imageOpacity); // Прозрачность
       // Случайным образом выбираем изображение из списка
       final randomImage = images[point.imageNum];
 

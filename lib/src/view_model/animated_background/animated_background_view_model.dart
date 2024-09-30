@@ -26,6 +26,9 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final bool enableTouchReaction;
   final double touchSpeedMultiplier;
   final CustomPaint? customPaint;
+  final double lineOpacity;
+  final double pointOpacity;
+  final double imageOpacity;
 
   double get width => _width;
   double get height => _height;
@@ -67,6 +70,9 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.stopResizingAnimation,
     required this.enableTouchReaction,
     required this.touchSpeedMultiplier,
+    required this.lineOpacity,
+    required this.pointOpacity,
+    required this.imageOpacity,
     this.customPaint,
     required TickerProvider vsync,
   })  : _width = width,

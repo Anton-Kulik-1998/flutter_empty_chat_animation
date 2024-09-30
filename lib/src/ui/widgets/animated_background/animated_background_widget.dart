@@ -22,6 +22,9 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final bool enableTouchReaction;
   final double touchSpeedMultiplier;
   final CustomPaint? customPaint;
+  final double lineOpacity;
+  final double pointOpacity;
+  final double imageOpacity;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -42,6 +45,9 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.enableTouchReaction = false,
     this.touchSpeedMultiplier = 1,
     this.customPaint,
+    this.lineOpacity = 1,
+    this.pointOpacity = 1,
+    this.imageOpacity = 1,
   });
 
   @override
@@ -75,6 +81,9 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             enableTouchReaction: widget.enableTouchReaction,
             touchSpeedMultiplier: widget.touchSpeedMultiplier,
             customPaint: widget.customPaint,
+            lineOpacity: widget.lineOpacity,
+            pointOpacity: widget.pointOpacity,
+            imageOpacity: widget.imageOpacity,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),
@@ -105,6 +114,9 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                         enableLines: viewModel.enableLines,
                         imagesLoaded: viewModel.imagesLoaded,
                         opacityAnimation: viewModel.opacityAnimation,
+                        lineOpacity: viewModel.lineOpacity,
+                        pointOpacity: viewModel.pointOpacity,
+                        imageOpacity: viewModel.imageOpacity,
                       ),
                       child: Container(),
                     ),
