@@ -20,10 +20,10 @@ class EmptyChatPage extends StatelessWidget {
             AnimatedBackgroundWidget(
               width: size.width,
               height: size.height,
-              assetImages: const [
-                'assets/images/ufo.png',
-                // 'assets/images/1.png'
-              ],
+              // assetImages: const [
+              //   'assets/images/ufo.png',
+              //   // 'assets/images/1.png'
+              // ],
               numPoints: 20,
               enableLines: true,
               maxLineDistance: 500,
