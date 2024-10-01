@@ -14,7 +14,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double imageSize;
   final double pointSize;
   final double maxLineDistance;
-  final List<String>? assetImage;
+  final List<String>? assetImages;
   final double wallCollisionOffset;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
   final Color paintColor;
@@ -52,10 +52,6 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   List<PointModel> get points => _points;
   List<ui.Image> get images => _images; // Геттер для доступа к изображениям
 
-  // Флаг для отслеживания загрузки изображений
-  bool _imagesLoaded = false;
-  bool get imagesLoaded => _imagesLoaded; // Геттер для доступа к флагу
-
   AnimatedBackgroundViewModel({
     required double width,
     required double height,
@@ -83,11 +79,11 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
         _height = height {
     _points = List.generate(numPoints, (index) {
       return PointModel(
-          position: Offset(
-              _random.nextDouble() * width, _random.nextDouble() * height),
-          velocity: Offset(_random.nextDouble() * maxSpeed * 2 - maxSpeed,
-              _random.nextDouble() * maxSpeed * 2 - maxSpeed),
-          imageNum: _random.nextInt(assetImages.length));
+        position:
+            Offset(_random.nextDouble() * width, _random.nextDouble() * height),
+        velocity: Offset(_random.nextDouble() * maxSpeed * 2 - maxSpeed,
+            _random.nextDouble() * maxSpeed * 2 - maxSpeed),
+      );
     });
 
     _opacityController = AnimationController(
@@ -108,7 +104,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
       duration: const Duration(seconds: 1),
     )..addListener(_updatePoints);
     _controller.repeat();
-    _loadImages(assetImage);
+    _loadImages(assetImages);
   }
 
   // Новый метод для обновления размеров
@@ -166,8 +162,6 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
       _imagesLoaded = true;
       notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
     }
-    _imagesLoaded = true;
-    notifyListeners(); // Уведомляем слушателей после загрузки всех изображений
   }
 
   void _isReturnToScreenCheck(int i) {

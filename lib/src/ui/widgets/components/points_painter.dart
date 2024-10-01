@@ -73,6 +73,9 @@ class PointsPainter extends CustomPainter {
     }
 
     for (final point in points) {
+      paint.color = paint.color
+          .withOpacity(opacityAnimation * imageOpacity); // Прозрачность
+
       point.selectedImage ??= images[_random.nextInt(images.length)];
 
       // Определяем исходный и целевой прямоугольники для отрисовки изображения

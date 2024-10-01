@@ -9,7 +9,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double height;
   final int numPoints;
   final double maxSpeed;
-  final List<String>? assetImage;
+  final List<String>? assetImages;
   final double wallCollisionOffset;
   final double imageSize;
   final double pointSize;
