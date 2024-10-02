@@ -14,7 +14,10 @@ class EmptyChatPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
       body: ChangeNotifierProvider(
-        create: (_) => EmptyChatViewModel(),
+        create: (_) => EmptyChatViewModel(
+          screenWidth: size.width,
+          screenHeight: size.height,
+        ),
         child: AnimatedBackgroundWidget(
           width: size.width,
           height: size.height,
@@ -116,56 +119,46 @@ class _EmptyChatBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    // Если ширина экрана меньше порога, возвращаем пустой виджет
-    if (screenSize.height < 700) {
-      return SliverToBoxAdapter(
-          child: const SizedBox.shrink()); // Пустой виджет
-    }
-
-    final double bannerWidth;
-    // Рассчитываем ширину баннера как процент от ширины экрана
-    (screenSize.width < 400)
-        ? bannerWidth =
-            screenSize.width * 0.6 // Ширина баннера - 60% от ширины экрана
-        : bannerWidth = 400;
-
-    final bannerHeight = bannerWidth; // Высота баннера
-
-    final sizedBoxHeight = screenSize.height - 300;
-
-    // Рассчитываем размеры изображения пропорционально
-    final imageSize =
-        bannerWidth * 0.8; // Размер изображения - 80% от ширины баннера
-
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: sizedBoxHeight,
-        child: Center(
-          child: Container(
-            width: bannerWidth,
-            height: bannerHeight,
-            decoration: const BoxDecoration(
-              color: AppColors.chatBannerBackground,
-              borderRadius: AppConstants.borderRadius24,
-            ),
+    return Consumer<EmptyChatViewModel>(
+      builder: (context, viewModel, child) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          viewModel.updateSize(screenSize.width, screenSize.height);
+        });
+        // Если ширина экрана меньше порога, возвращаем пустой виджет
+        if (viewModel.shouldDisplayBanner) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: viewModel.sizedBoxHeight,
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/1.png",
-                    fit: BoxFit.contain,
-                    width: imageSize,
-                    height: imageSize,
+              child: Container(
+                width: viewModel.bannerWidth,
+                height: viewModel.bannerHeight,
+                decoration: const BoxDecoration(
+                  color: AppColors.chatBannerBackground,
+                  borderRadius: AppConstants.borderRadius24,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/1.png",
+                        fit: BoxFit.contain,
+                        width: viewModel.imageSize,
+                        height: viewModel.imageSize,
+                      ),
+                      const Text("chat list is empty",
+                          style: AppTextStyles.bannerText),
+                    ],
                   ),
-                  const Text("chat list is empty",
-                      style: AppTextStyles.bannerText),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
