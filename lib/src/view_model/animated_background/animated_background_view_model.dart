@@ -25,6 +25,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final bool enableLines;
   final bool stopResizingAnimation;
   final bool enableTouchReaction;
+  final double maxTouchDistance;
   final double touchSpeedMultiplier;
   final CustomPaint? customPaint;
   final double lineOpacity;
@@ -71,6 +72,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.enableLines,
     required this.stopResizingAnimation,
     required this.enableTouchReaction,
+    required this.maxTouchDistance,
     required this.touchSpeedMultiplier,
     required this.lineOpacity,
     required this.pointOpacity,
@@ -260,7 +262,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     if (enableTouchReaction) {
       for (int i = 0; i < _points.length; i++) {
         final distance = (touchPosition - _points[i].position).distance;
-        if (distance < maxLineDistance) {
+        if (distance < maxTouchDistance) {
           final direction = _points[i].position - touchPosition;
           _points[i].velocity = direction *
               (maxSpeed * touchSpeedMultiplier / direction.distance);

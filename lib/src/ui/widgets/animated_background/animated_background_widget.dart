@@ -21,6 +21,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final bool enableLines;
   final bool stopResizingAnimation;
   final bool enableTouchReaction;
+  final double maxTouchDistance;
   final double touchSpeedMultiplier;
   final CustomPaint? customPaint;
   final double lineOpacity;
@@ -45,6 +46,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.enableLines = false,
     this.stopResizingAnimation = false,
     this.enableTouchReaction = false,
+    this.maxTouchDistance = 100,
     this.touchSpeedMultiplier = 1,
     this.customPaint,
     this.lineOpacity = 1,
@@ -82,6 +84,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             enableLines: widget.enableLines,
             stopResizingAnimation: widget.stopResizingAnimation,
             enableTouchReaction: widget.enableTouchReaction,
+            maxTouchDistance: widget.maxTouchDistance,
             touchSpeedMultiplier: widget.touchSpeedMultiplier,
             customPaint: widget.customPaint,
             lineOpacity: widget.lineOpacity,
