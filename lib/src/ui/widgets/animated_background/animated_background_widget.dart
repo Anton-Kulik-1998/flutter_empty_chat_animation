@@ -32,7 +32,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     required this.height,
     this.numPoints = 20,
     this.maxSpeed = 0.5,
-    this.assetImages = const [],
+    this.assetImages,
     this.wallCollisionOffset = 0,
     this.imageSize = 50,
     this.pointSize = 0,
