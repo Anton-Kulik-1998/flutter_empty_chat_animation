@@ -15,36 +15,32 @@ class EmptyChatPage extends StatelessWidget {
       backgroundColor: AppColors.scaffoldBackground,
       body: ChangeNotifierProvider(
         create: (_) => EmptyChatViewModel(),
-        child: Stack(
-          children: [
-            AnimatedBackgroundWidget(
-              width: size.width,
-              height: size.height,
-              assetImages: const [
-                'assets/images/ufo.png',
-                // 'assets/images/1.png'
-              ],
-              numPoints: 20,
-              maxLineDistance: 500,
-              lineColor: Colors.black,
-              paintColor: Colors.black,
-              imageOpacity: 0.1,
-              wallCollisionOffset: 25,
-              stopResizingAnimation: true,
-            ),
-            const Center(
-              child: Padding(
-                padding: AppConstants.paddingAll16,
-                child: CustomScrollView(
-                  slivers: [
-                    _MySliverAppBar(),
-                    _MySearchTextField(),
-                    _EmptyChatBanner(),
-                  ],
-                ),
+        child: AnimatedBackgroundWidget(
+          width: size.width,
+          height: size.height,
+          assetImages: const [
+            'assets/images/ufo.png',
+            // 'assets/images/1.png'
+          ],
+          numPoints: 20,
+          maxLineDistance: 500,
+          lineColor: Colors.black,
+          paintColor: Colors.black,
+          imageOpacity: 0.1,
+          wallCollisionOffset: 25,
+          stopResizingAnimation: true,
+          child: const Center(
+            child: Padding(
+              padding: AppConstants.paddingAll16,
+              child: CustomScrollView(
+                slivers: [
+                  _MySliverAppBar(),
+                  _MySearchTextField(),
+                  _EmptyChatBanner(),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

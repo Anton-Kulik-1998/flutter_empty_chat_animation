@@ -7,6 +7,7 @@ import '../components/components.dart'; // Для связи с ViewModel
 class AnimatedBackgroundWidget extends StatefulWidget {
   final double width;
   final double height;
+  final Widget? child;
   final int numPoints;
   final double maxSpeed;
   final List<String>? assetImages;
@@ -30,6 +31,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     super.key,
     required this.width,
     required this.height,
+    this.child,
     this.numPoints = 20,
     this.maxSpeed = 0.5,
     this.assetImages,
@@ -65,6 +67,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
           create: (_) => AnimatedBackgroundViewModel(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
+            child: widget.child,
             numPoints: widget.numPoints,
             maxSpeed: widget.maxSpeed,
             assetImages: widget.assetImages,
@@ -118,7 +121,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
                         pointOpacity: viewModel.pointOpacity,
                         imageOpacity: viewModel.imageOpacity,
                       ),
-                      child: Container(),
+                      child: viewModel.child ?? Container(),
                     ),
               );
             },

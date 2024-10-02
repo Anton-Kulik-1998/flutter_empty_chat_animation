@@ -9,6 +9,7 @@ import 'package:flutter_empty_chat_animation/src/ui/widgets/animated_background/
 class AnimatedBackgroundViewModel extends ChangeNotifier {
   double _width;
   double _height;
+  final Widget? child;
   final int numPoints;
   final double maxSpeed;
   final double imageSize;
@@ -55,6 +56,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   AnimatedBackgroundViewModel({
     required double width,
     required double height,
+    this.child,
     required this.numPoints,
     required this.maxSpeed,
     required this.imageSize,
