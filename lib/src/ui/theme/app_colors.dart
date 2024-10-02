@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color scaffoldBackground =
-      Color.fromARGB(127, 224, 224, 224); // Серый фон с прозрачностью
+      Color.fromARGB(255, 238, 238, 238); // Серый фон с прозрачностью
   static const Color appBarBackgroundTransparent =
       Colors.transparent; // Прозрачный AppBar
   static const Color appBarText =

@@ -20,17 +20,15 @@ class EmptyChatPage extends StatelessWidget {
             AnimatedBackgroundWidget(
               width: size.width,
               height: size.height,
-              // assetImages: const [
-              //   'assets/images/ufo.png',
-              //   // 'assets/images/1.png'
-              // ],
+              assetImages: const [
+                'assets/images/ufo.png',
+                // 'assets/images/1.png'
+              ],
               numPoints: 20,
-              enableLines: true,
               maxLineDistance: 500,
               lineColor: Colors.black,
               paintColor: Colors.black,
-              lineOpacity: 0.1,
-              imageOpacity: 0.2,
+              imageOpacity: 0.1,
               wallCollisionOffset: 25,
               stopResizingAnimation: true,
             ),
@@ -119,13 +117,36 @@ class _EmptyChatBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
+    // Если ширина экрана меньше порога, возвращаем пустой виджет
+    if (screenSize.height < 700) {
+      return SliverToBoxAdapter(
+          child: const SizedBox.shrink()); // Пустой виджет
+    }
+
+    final double bannerWidth;
+    // Рассчитываем ширину баннера как процент от ширины экрана
+    (screenSize.width < 400)
+        ? bannerWidth =
+            screenSize.width * 0.6 // Ширина баннера - 60% от ширины экрана
+        : bannerWidth = 400;
+
+    final bannerHeight = bannerWidth; // Высота баннера
+
+    final sizedBoxHeight = screenSize.height - 300;
+
+    // Рассчитываем размеры изображения пропорционально
+    final imageSize =
+        bannerWidth * 0.8; // Размер изображения - 80% от ширины баннера
+
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height - 200,
+        height: sizedBoxHeight,
         child: Center(
           child: Container(
-            width: AppConstants.bannerWidth,
-            height: AppConstants.bannerHeight,
+            width: bannerWidth,
+            height: bannerHeight,
             decoration: const BoxDecoration(
               color: AppColors.chatBannerBackground,
               borderRadius: AppConstants.borderRadius24,
@@ -137,8 +158,8 @@ class _EmptyChatBanner extends StatelessWidget {
                   Image.asset(
                     "assets/images/1.png",
                     fit: BoxFit.contain,
-                    width: 350,
-                    height: 350,
+                    width: imageSize,
+                    height: imageSize,
                   ),
                   const Text("chat list is empty",
                       style: AppTextStyles.bannerText),
