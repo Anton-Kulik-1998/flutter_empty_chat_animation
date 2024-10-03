@@ -28,6 +28,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
   final double pointOpacity;
   final double imageOpacity;
   final bool enableSmoothOpacityAnimation;
+  final int opacityAnimationSeconds;
 
   const AnimatedBackgroundWidget({
     super.key,
@@ -54,6 +55,7 @@ class AnimatedBackgroundWidget extends StatefulWidget {
     this.pointOpacity = 1,
     this.imageOpacity = 1,
     this.enableSmoothOpacityAnimation = true,
+    this.opacityAnimationSeconds = 2,
   });
 
   @override
@@ -93,6 +95,7 @@ class _AnimatedBackgroundWidgetState extends State<AnimatedBackgroundWidget>
             pointOpacity: widget.pointOpacity,
             imageOpacity: widget.imageOpacity,
             enableSmoothOpacityAnimation: widget.enableSmoothOpacityAnimation,
+            opacityAnimationSeconds: widget.opacityAnimationSeconds,
             vsync:
                 this, // Теперь это доступно, так как мы используем StatefulWidget с миксином
           ),

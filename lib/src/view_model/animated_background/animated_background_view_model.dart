@@ -32,6 +32,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double pointOpacity;
   final double imageOpacity;
   final bool enableSmoothOpacityAnimation;
+  final int opacityAnimationSeconds;
 
   double get width => _width;
   double get height => _height;
@@ -80,6 +81,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.pointOpacity,
     required this.imageOpacity,
     required this.enableSmoothOpacityAnimation,
+    required this.opacityAnimationSeconds,
     this.customPaint,
     required TickerProvider vsync,
   })  : _width = width,
@@ -95,7 +97,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
 
     _opacityController = AnimationController(
       vsync: vsync,
-      duration: const Duration(seconds: 2),
+      duration: Duration(seconds: opacityAnimationSeconds),
     );
 
     _opacityAnimation =
