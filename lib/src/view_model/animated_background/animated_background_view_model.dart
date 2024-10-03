@@ -31,6 +31,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final double lineOpacity;
   final double pointOpacity;
   final double imageOpacity;
+  final bool enableSmoothOpacityAnimation;
 
   double get width => _width;
   double get height => _height;
@@ -44,8 +45,9 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
       _opacityController; // Контроллер для анимации прозрачности
   late Animation<double> _opacityAnimation; // Анимация прозрачности
 
-  double get opacityAnimation =>
-      _opacityAnimation.value; // Текущее значение прозрачности
+  double get opacityAnimation => enableSmoothOpacityAnimation
+      ? _opacityAnimation.value
+      : 1; // Текущее значение прозрачности
 
   // Флаг для отслеживания загрузки изображений
   bool _imagesLoaded = false;
@@ -77,6 +79,7 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.lineOpacity,
     required this.pointOpacity,
     required this.imageOpacity,
+    required this.enableSmoothOpacityAnimation,
     this.customPaint,
     required TickerProvider vsync,
   })  : _width = width,
