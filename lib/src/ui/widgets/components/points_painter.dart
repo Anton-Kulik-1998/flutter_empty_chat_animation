@@ -111,12 +111,12 @@ class PointsPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.0;
 
+    if (enableLines) _addLines(canvas, linePaint);
+
     // Если изображения присутствуют, рисуем их, иначе рисуем точки
     (imagesLoaded)
         ? _drawImages(canvas, imagePaint)
         : _drawPoints(canvas, pointPaint);
-
-    if (enableLines) _addLines(canvas, linePaint);
   }
 
   @override
