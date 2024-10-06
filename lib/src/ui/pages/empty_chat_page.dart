@@ -29,7 +29,6 @@ class EmptyChatPage extends StatelessWidget {
           maxLineDistance: 500,
           enableTouchReaction: true,
           lineColor: Colors.black,
-          paintColor: Colors.black,
           imageOpacity: 0.1,
           wallCollisionOffset: 25,
           stopResizingAnimation: true,

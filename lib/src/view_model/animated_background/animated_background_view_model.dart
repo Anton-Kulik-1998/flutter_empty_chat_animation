@@ -18,7 +18,8 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
   final List<String>? assetImages;
   final double wallCollisionOffset;
   Timer? _resizeTimer; // Для задержки перед перезапуском анимации
-  final Color paintColor;
+  final Color pointColor;
+  final Color imageColor;
   final Color lineColor;
   final bool lineColorFading;
   final double maxDistance;
@@ -68,7 +69,8 @@ class AnimatedBackgroundViewModel extends ChangeNotifier {
     required this.maxLineDistance,
     required this.assetImages,
     required this.wallCollisionOffset,
-    required this.paintColor,
+    required this.pointColor,
+    required this.imageColor,
     required this.lineColor,
     required this.lineColorFading,
     required this.maxDistance,

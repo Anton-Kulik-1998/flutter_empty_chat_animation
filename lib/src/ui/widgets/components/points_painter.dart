@@ -12,7 +12,8 @@ class PointsPainter extends CustomPainter {
   final List<ui.Image> images; // Список изображений
   final double imageSize;
   final double pointSize;
-  final Color paintColor;
+  final Color pointColor;
+  final Color imageColor;
   final Color lineColor;
   final double maxDistance;
   final bool enableLines;
@@ -28,7 +29,8 @@ class PointsPainter extends CustomPainter {
     required this.images,
     required this.imageSize,
     required this.pointSize,
-    required this.paintColor,
+    required this.pointColor,
+    required this.imageColor,
     required this.lineColor,
     required this.maxDistance,
     required this.enableLines,
@@ -49,9 +51,9 @@ class PointsPainter extends CustomPainter {
         final distance = (points[i].position - points[j].position).distance;
         if (distance < maxDistance) {
           paint.color = lineColorFading
-              ? lineColor.withOpacity((opacityAnimation * lineOpacity) *
+              ? paint.color.withOpacity((opacityAnimation * lineOpacity) *
                   (1.0 - (distance / maxDistance)))
-              : lineColor.withOpacity(opacityAnimation * lineOpacity);
+              : paint.color.withOpacity(opacityAnimation * lineOpacity);
           canvas.drawLine(points[i].position, points[j].position, paint);
         }
       }
@@ -94,15 +96,27 @@ class PointsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = paintColor
+    final imagePaint = Paint()
+      ..color = imageColor
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 1.0;
+
+    final pointPaint = Paint()
+      ..color = pointColor
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 1.0;
+
+    final linePaint = Paint()
+      ..color = lineColor
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1.0;
 
     // Если изображения присутствуют, рисуем их, иначе рисуем точки
-    (imagesLoaded) ? _drawImages(canvas, paint) : _drawPoints(canvas, paint);
+    (imagesLoaded)
+        ? _drawImages(canvas, imagePaint)
+        : _drawPoints(canvas, pointPaint);
 
-    if (enableLines) _addLines(canvas, paint);
+    if (enableLines) _addLines(canvas, linePaint);
   }
 
   @override
